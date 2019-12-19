@@ -1,6 +1,8 @@
 <template>
   <div>
     <p>{{ title }}</p>
+    <router-link to="/foo">Foo</router-link>
+    <router-link to="/bar">Bar</router-link>
     <div class="form-user">
       <input v-model="form.name" type="text" placeholder="User">
       <input v-model="form.email" type="email" placeholder="Email">
