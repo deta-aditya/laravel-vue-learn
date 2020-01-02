@@ -10,8 +10,15 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $users = User::all();
-        return response()->json($users);
+        // $query = User::query();
+
+        // $query->take($request->input('take', 10));
+        
+        // $query->skip($request->input('skip', 0));
+
+        // $users = $query->get();
+
+        return User::paginate(10);
     }
 
     public function insert(Request $request)
