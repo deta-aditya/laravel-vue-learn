@@ -1,28 +1,31 @@
 <template>
   <aside class="sidebar border-right">
     <div class="list-group list-group-flush">
-      <a 
-        v-for="link in links" 
-        :key="link.href" 
-        :href="href" 
-        class="list-group-item list-group-item-action">
-        {{ link.text }}
-      </a>
+      <SideBarLink
+        v-for="link in links"
+        :key="link.href"
+        :link="link"
+        />
     </div>
   </aside>
 </template>
 
 <script>
+import SideBarLink from './SideBarLink'
+
 export default {
   data() {
     return {
       links: [
-        { href: '#', text: 'Home' },
-        { href: '#', text: 'About' },
-        { href: '#', text: 'Vendor Management' },
+        { href: '/', text: 'Home' },
+        { href: '/foo', text: 'About' },
+        { href: '/bar', text: 'Vendor Management' },
       ]
     }
-  }
+  },
+  components: {
+    SideBarLink,
+  },
 }
 </script>
 

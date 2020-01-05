@@ -1,11 +1,9 @@
-import App from './src/App'
+import Home from './src/routes/Home'
 import Foo from './src/routes/Foo'
 import Bar from './src/routes/Bar'
-import Dashboard from './src/routes/Dashboard'
 
 export default [
-  { path: '/', component: App },
+  { path: '/', component: Home },
   { path: '/foo', component: Foo },
   { path: '/bar', component: Bar },
-  { path: '/dashboard', component: Dashboard },
 ]
