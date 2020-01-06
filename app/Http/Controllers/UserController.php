@@ -18,7 +18,7 @@ class UserController extends Controller
 
         // $users = $query->get();
 
-        return User::paginate(10);
+        return User::orderBy('id', 'desc')->paginate(10);
     }
 
     public function insert(Request $request)

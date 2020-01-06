@@ -7,36 +7,36 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="record in entities" :key="record.id">
+        <tr v-for="record in users" :key="record.id">
           <slot :entity="record"></slot>
         </tr>
       </tbody>
     </table>
-    <nav aria-label="Page navigation example">
-      <ul class="pagination">
+    <nav aria-label="Page navigation example" class="paginator overflow-auto">
+      <ul class="pagination m-0">
         <li :class="{'page-item': true, 'disabled': isFirstPage}">
           <a 
             class="page-link" 
             href="#"
-            @click.prevent="getEntityFromServer(response.current_page - 1)">
+            @click.prevent="getEntityFromServer(page.current_page - 1)">
             Previous
           </a>
         </li>
         <li 
-          v-for="page in response.last_page" :key="page" 
-          :class="{'page-item': true, 'active': isCurrentPage(page)}">
+          v-for="pageItem in page.last_page" :key="pageItem" 
+          :class="{'page-item': true, 'active': isCurrentPage(pageItem)}">
           <a
             class="page-link" 
             href="#"
-            @click.prevent="getEntityFromServer(page)">
-            {{page}}
+            @click.prevent="getEntityFromServer(pageItem)">
+            {{pageItem}}
           </a>
         </li>
         <li :class="{'page-item': true, 'disabled': isLastPage}">
           <a 
             class="page-link" 
             href="#"
-            @click.prevent="getEntityFromServer(response.current_page + 1)">
+            @click.prevent="getEntityFromServer(page.current_page + 1)">
             Next
           </a>
         </li>
@@ -46,6 +46,8 @@
 </template>
 
 <script>
+import { mapState, mapGetters, mapActions } from 'vuex'
+
 export default {
   props: {
     darkMode: {
@@ -66,6 +68,17 @@ export default {
   },
 
   computed: {
+    ...mapState('users', [
+      'page', 
+      'users',
+    ]),
+
+    ...mapGetters('users', [
+      'isFirstPage',
+      'isLastPage',
+      'isCurrentPage',
+    ]),
+
     tableClasses() {
       return {
         'table': true,
@@ -75,18 +88,6 @@ export default {
         'table-dark': this.darkMode,
       }
     },
-
-    entities() {
-      return Object.keys(this.response).length > 0 ? this.response.data : []
-    },
-
-    isFirstPage() {
-      return this.response.current_page === this.response.from
-    },
-
-    isLastPage() {
-      return this.response.current_page === this.response.last_page
-    },
   },
 
   mounted() {
@@ -94,14 +95,15 @@ export default {
   },
 
   methods: {
-    isCurrentPage(page) {
-      return this.response.current_page === page
-    },
+    ...mapActions('users', [
+      'fetchUsers',
+    ]),
 
     getEntityFromServer(page = 1) {
-      axios.get(`${this.entity.getUrl}?page=${page}`)
-        .then((response) => this.response = response.data)
-    }
+      this.fetchUsers({ 
+        page,
+      })
+    },
   }
 }
 </script>

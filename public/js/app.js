@@ -3613,6 +3613,13 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -3660,6 +3667,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     darkMode: {
@@ -3676,7 +3684,7 @@ __webpack_require__.r(__webpack_exports__);
       response: {}
     };
   },
-  computed: {
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])('users', ['page', 'users']), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])('users', ['isFirstPage', 'isLastPage', 'isCurrentPage']), {
     tableClasses: function tableClasses() {
       return {
         'table': true,
@@ -3685,33 +3693,19 @@ __webpack_require__.r(__webpack_exports__);
         'table-hover': true,
         'table-dark': this.darkMode
       };
-    },
-    entities: function entities() {
-      return Object.keys(this.response).length > 0 ? this.response.data : [];
-    },
-    isFirstPage: function isFirstPage() {
-      return this.response.current_page === this.response.from;
-    },
-    isLastPage: function isLastPage() {
-      return this.response.current_page === this.response.last_page;
     }
-  },
+  }),
   mounted: function mounted() {
     this.getEntityFromServer();
   },
-  methods: {
-    isCurrentPage: function isCurrentPage(page) {
-      return this.response.current_page === page;
-    },
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])('users', ['fetchUsers']), {
     getEntityFromServer: function getEntityFromServer() {
-      var _this = this;
-
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
-      axios.get("".concat(this.entity.getUrl, "?page=").concat(page)).then(function (response) {
-        return _this.response = response.data;
+      this.fetchUsers({
+        page: page
       });
     }
-  }
+  })
 });
 
 /***/ }),
@@ -3730,6 +3724,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _entities_User__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../entities/User */ "./resources/js/src/entities/User.js");
 /* harmony import */ var _components_TableKita__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/TableKita */ "./resources/js/src/components/TableKita.vue");
 /* harmony import */ var _components_RoutePage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/RoutePage */ "./resources/js/src/components/RoutePage.vue");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -3752,6 +3753,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -3760,9 +3778,20 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       dark: false,
-      userEntity: _entities_User__WEBPACK_IMPORTED_MODULE_1__["default"]
+      userEntity: _entities_User__WEBPACK_IMPORTED_MODULE_1__["default"],
+      formData: {
+        name: '',
+        email: ''
+      }
     };
   },
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_4__["mapActions"])('users', ['insertUser']), {
+    insertUserOnForm: function insertUserOnForm() {
+      this.insertUser({
+        user: this.formData
+      });
+    }
+  }),
   components: {
     TableKita: _components_TableKita__WEBPACK_IMPORTED_MODULE_2__["default"],
     RoutePage: _components_RoutePage__WEBPACK_IMPORTED_MODULE_3__["default"]
@@ -93355,7 +93384,7 @@ var render = function() {
       _vm._v(" "),
       _c(
         "tbody",
-        _vm._l(_vm.entities, function(record) {
+        _vm._l(_vm.users, function(record) {
           return _c(
             "tr",
             { key: record.id },
@@ -93367,41 +93396,20 @@ var render = function() {
       )
     ]),
     _vm._v(" "),
-    _c("nav", { attrs: { "aria-label": "Page navigation example" } }, [
-      _c(
-        "ul",
-        { staticClass: "pagination" },
-        [
-          _c(
-            "li",
-            { class: { "page-item": true, disabled: _vm.isFirstPage } },
-            [
-              _c(
-                "a",
-                {
-                  staticClass: "page-link",
-                  attrs: { href: "#" },
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      return _vm.getEntityFromServer(
-                        _vm.response.current_page - 1
-                      )
-                    }
-                  }
-                },
-                [_vm._v("\n          Previous\n        ")]
-              )
-            ]
-          ),
-          _vm._v(" "),
-          _vm._l(_vm.response.last_page, function(page) {
-            return _c(
+    _c(
+      "nav",
+      {
+        staticClass: "paginator overflow-auto",
+        attrs: { "aria-label": "Page navigation example" }
+      },
+      [
+        _c(
+          "ul",
+          { staticClass: "pagination m-0" },
+          [
+            _c(
               "li",
-              {
-                key: page,
-                class: { "page-item": true, active: _vm.isCurrentPage(page) }
-              },
+              { class: { "page-item": true, disabled: _vm.isFirstPage } },
               [
                 _c(
                   "a",
@@ -93411,38 +93419,73 @@ var render = function() {
                     on: {
                       click: function($event) {
                         $event.preventDefault()
-                        return _vm.getEntityFromServer(page)
+                        return _vm.getEntityFromServer(
+                          _vm.page.current_page - 1
+                        )
                       }
                     }
                   },
-                  [_vm._v("\n          " + _vm._s(page) + "\n        ")]
+                  [_vm._v("\n          Previous\n        ")]
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _vm._l(_vm.page.last_page, function(pageItem) {
+              return _c(
+                "li",
+                {
+                  key: pageItem,
+                  class: {
+                    "page-item": true,
+                    active: _vm.isCurrentPage(pageItem)
+                  }
+                },
+                [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "page-link",
+                      attrs: { href: "#" },
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.getEntityFromServer(pageItem)
+                        }
+                      }
+                    },
+                    [_vm._v("\n          " + _vm._s(pageItem) + "\n        ")]
+                  )
+                ]
+              )
+            }),
+            _vm._v(" "),
+            _c(
+              "li",
+              { class: { "page-item": true, disabled: _vm.isLastPage } },
+              [
+                _c(
+                  "a",
+                  {
+                    staticClass: "page-link",
+                    attrs: { href: "#" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.getEntityFromServer(
+                          _vm.page.current_page + 1
+                        )
+                      }
+                    }
+                  },
+                  [_vm._v("\n          Next\n        ")]
                 )
               ]
             )
-          }),
-          _vm._v(" "),
-          _c("li", { class: { "page-item": true, disabled: _vm.isLastPage } }, [
-            _c(
-              "a",
-              {
-                staticClass: "page-link",
-                attrs: { href: "#" },
-                on: {
-                  click: function($event) {
-                    $event.preventDefault()
-                    return _vm.getEntityFromServer(
-                      _vm.response.current_page + 1
-                    )
-                  }
-                }
-              },
-              [_vm._v("\n          Next\n        ")]
-            )
-          ])
-        ],
-        2
-      )
-    ])
+          ],
+          2
+        )
+      ]
+    )
   ])
 }
 var staticRenderFns = []
@@ -93470,43 +93513,120 @@ var render = function() {
   return _c(
     "RoutePage",
     [
-      _vm._v("\n  Bar\n  "),
-      _c("input", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.dark,
-            expression: "dark"
+      _c("div", { staticClass: "card" }, [
+        _c("div", { staticClass: "card-body" }, [
+          _c("div", { staticClass: "form-inline" }, [
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { staticClass: "mr-1", attrs: { for: "name" } }, [
+                _vm._v("Name")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.formData.name,
+                    expression: "formData.name"
+                  }
+                ],
+                staticClass: "mr-3",
+                attrs: { type: "text", id: "name" },
+                domProps: { value: _vm.formData.name },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.formData, "name", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { staticClass: "mr-1", attrs: { for: "email" } }, [
+                _vm._v("Email")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.formData.email,
+                    expression: "formData.email"
+                  }
+                ],
+                staticClass: "mr-3",
+                attrs: { type: "email", id: "email" },
+                domProps: { value: _vm.formData.email },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.formData, "email", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-primary",
+                on: {
+                  click: function($event) {
+                    return _vm.insertUserOnForm()
+                  }
+                }
+              },
+              [_vm._v("Add")]
+            )
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.dark,
+              expression: "dark"
+            }
+          ],
+          attrs: { type: "radio" },
+          domProps: { value: true, checked: _vm._q(_vm.dark, true) },
+          on: {
+            change: function($event) {
+              _vm.dark = true
+            }
           }
-        ],
-        attrs: { type: "radio" },
-        domProps: { value: true, checked: _vm._q(_vm.dark, true) },
-        on: {
-          change: function($event) {
-            _vm.dark = true
+        }),
+        _vm._v(" Dark\n    "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.dark,
+              expression: "dark"
+            }
+          ],
+          attrs: { type: "radio" },
+          domProps: { value: false, checked: _vm._q(_vm.dark, false) },
+          on: {
+            change: function($event) {
+              _vm.dark = false
+            }
           }
-        }
-      }),
-      _vm._v(" Dark\n  "),
-      _c("input", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.dark,
-            expression: "dark"
-          }
-        ],
-        attrs: { type: "radio" },
-        domProps: { value: false, checked: _vm._q(_vm.dark, false) },
-        on: {
-          change: function($event) {
-            _vm.dark = false
-          }
-        }
-      }),
-      _vm._v(" Light\n  "),
+        }),
+        _vm._v(" Light\n  ")
+      ]),
+      _vm._v(" "),
       _c("TableKita", {
         attrs: { "dark-mode": _vm.dark, entity: _vm.userEntity },
         scopedSlots: _vm._u([
@@ -110608,12 +110728,80 @@ var stores = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _counter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./counter */ "./resources/js/src/store/counter.js");
+/* harmony import */ var _users__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./users */ "./resources/js/src/store/users.js");
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   modules: {
-    counter: _counter__WEBPACK_IMPORTED_MODULE_0__["default"]
+    counter: _counter__WEBPACK_IMPORTED_MODULE_0__["default"],
+    users: _users__WEBPACK_IMPORTED_MODULE_1__["default"]
   }
 });
+
+/***/ }),
+
+/***/ "./resources/js/src/store/users.js":
+/*!*****************************************!*\
+  !*** ./resources/js/src/store/users.js ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+
+var users = {
+  namespaced: true,
+  state: {
+    page: {
+      current_page: 0,
+      first_page: 0,
+      last_page: 0
+    },
+    users: []
+  },
+  getters: {
+    isFirstPage: function isFirstPage(state) {
+      return state.page.current_page === state.page.first_page;
+    },
+    isLastPage: function isLastPage(state) {
+      return state.page.current_page === state.page.last_page;
+    },
+    isCurrentPage: function isCurrentPage(state) {
+      return function (page) {
+        return state.page.current_page === page;
+      };
+    }
+  },
+  mutations: {
+    SET_PAGE: function SET_PAGE(state, payload) {
+      state.page.current_page = payload.current_page;
+      state.page.first_page = payload.from;
+      state.page.last_page = payload.last_page;
+    },
+    SET_USERS: function SET_USERS(state, payload) {
+      state.users = payload.data;
+    }
+  },
+  actions: {
+    fetchUsers: function fetchUsers(context, payload) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("http://localhost:8000/api/users?page=".concat(payload.page)).then(function (response) {
+        context.commit('SET_PAGE', response.data);
+        context.commit('SET_USERS', response.data);
+      });
+    },
+    insertUser: function insertUser(context, payload) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("http://localhost:8000/api/users", payload.user).then(function (response) {
+        return context.dispatch('fetchUsers', {
+          page: 1
+        });
+      });
+    }
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = (users);
 
 /***/ }),
 
