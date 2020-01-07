@@ -3564,6 +3564,16 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         href: '/bar',
         text: 'Vendor Management'
+      }, {
+        href: '/user',
+        text: 'User Management',
+        children: [{
+          href: '/',
+          text: 'User Index'
+        }, {
+          href: '/roles',
+          text: 'Role Index'
+        }]
       }]
     };
   },
@@ -3583,6 +3593,28 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3594,10 +3626,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'side-bar-link',
   props: {
     link: {
       required: true,
       type: Object
+    }
+  },
+  computed: {
+    collapseIdentifier: function collapseIdentifier() {
+      return this.link.href.substring(1);
+    },
+    extendedChildren: function extendedChildren() {
+      var _this = this;
+
+      if (this.link.children) {
+        return this.link.children.map(function (childLink) {
+          return _objectSpread({}, childLink, {
+            href: _this.link.href + childLink.href
+          });
+        });
+      } else {
+        return [];
+      }
     }
   }
 });
@@ -93347,14 +93398,40 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "router-link",
-    {
-      staticClass: "list-group-item list-group-item-action",
-      attrs: { "active-class": "active", to: _vm.link.href, exact: "" }
-    },
-    [_vm._v("\n  " + _vm._s(_vm.link.text) + "\n")]
-  )
+  return _vm.link.children
+    ? _c("div", [
+        _c(
+          "div",
+          {
+            staticClass: "list-group-item list-group-item-action",
+            attrs: {
+              "data-toggle": "collapse",
+              "data-target": "#" + _vm.collapseIdentifier
+            }
+          },
+          [_vm._v("\n    " + _vm._s(_vm.link.text) + "\n  ")]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "collapse", attrs: { id: _vm.collapseIdentifier } },
+          _vm._l(_vm.extendedChildren, function(childLink) {
+            return _c("side-bar-link", {
+              key: childLink.href,
+              attrs: { link: childLink }
+            })
+          }),
+          1
+        )
+      ])
+    : _c(
+        "router-link",
+        {
+          staticClass: "list-group-item list-group-item-action",
+          attrs: { "active-class": "active", to: _vm.link.href, exact: "" }
+        },
+        [_vm._v("\n  " + _vm._s(_vm.link.text) + "\n")]
+      )
 }
 var staticRenderFns = []
 render._withStripped = true

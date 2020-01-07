@@ -20,6 +20,10 @@ export default {
         { href: '/', text: 'Home' },
         { href: '/foo', text: 'About' },
         { href: '/bar', text: 'Vendor Management' },
+        { href: '/user', text: 'User Management', children: [
+          { href: '/', text: 'User Index'},
+          { href: '/roles', text: 'Role Index'},
+        ] },
       ]
     }
   },
