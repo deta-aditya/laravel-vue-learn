@@ -4,12 +4,12 @@
       <div class="card-body">
         <div class="form-inline">
           <div class="form-group">
-            <label class="mr-1" for="name">Name</label>
-            <input class="mr-3" v-model="formData.name" type="text" id="name" />
+            <label class="mr-1" for="name">Username</label>
+            <input class="mr-3" v-model="formData.username" type="text" id="username" />
           </div>
           <div class="form-group">
-            <label class="mr-1" for="email">Email</label>
-            <input class="mr-3" v-model="formData.email" type="email" id="email" />
+            <label class="mr-1" for="email">Password</label>
+            <input class="mr-3" v-model="formData.password" type="password" id="password" />
           </div>
           <button class="btn btn-primary" @click="insertUserOnForm()">Add</button>
         </div>
@@ -24,13 +24,11 @@
       :entity="userEntity">
       <template v-slot:header>
         <th>ID</th>
-        <th>Name</th>
-        <th>Email</th>
+        <th>Username</th>
       </template>
       <template v-slot="{ entity }">
         <td>{{ entity.id }}</td>
-        <td>{{ entity.name }}</td>
-        <td>{{ entity.email }}</td>
+        <td>{{ entity.username }}</td>
       </template>
     </TableKita>
   </RoutePage>
@@ -50,8 +48,8 @@ export default {
       dark: false,
       userEntity: User,
       formData: {
-        name: '',
-        email: '',
+        username: '',
+        password: '',
       }
     }
   },

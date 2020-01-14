@@ -3468,8 +3468,9 @@ function mergeFn (a, b) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_AppTopBar__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/AppTopBar */ "./resources/js/src/components/AppTopBar.vue");
 /* harmony import */ var _components_AppSideBar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/AppSideBar */ "./resources/js/src/components/AppSideBar.vue");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -3488,6 +3489,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -3499,32 +3522,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   data: function data() {
     return {
       title: 'User List',
-      form: {
-        name: '',
-        email: ''
+      formData: {
+        username: '',
+        password: ''
       },
       response: {}
     };
   },
-  computed: {},
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapGetters"])('auth', ['isLoggedIn'])),
   mounted: function mounted() {// this.getUsersFromServer()
   },
-  methods: {
-    saveUser: function saveUser() {
-      var newUser = _objectSpread({}, this.form);
-
-      this.saveUserToServer(newUser);
-      this.form.name = '';
-      this.form.email = '';
-    },
-    saveUserToServer: function saveUserToServer(user) {
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapActions"])('auth', ['login']), {
+    attemptLogin: function attemptLogin() {
       var _this = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('http://localhost:8000/api/users', user).then(function (response) {
-        return _this.getUsersFromServer();
+      this.login(this.formData).then(function () {
+        return console.log('Test');
+      }).then(function () {
+        return _this.$router.push('/foo');
       });
     }
-  }
+  })
 });
 
 /***/ }),
@@ -3818,8 +3836,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
 
 
 
@@ -3831,8 +3847,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       dark: false,
       userEntity: _entities_User__WEBPACK_IMPORTED_MODULE_1__["default"],
       formData: {
-        name: '',
-        email: ''
+        username: '',
+        password: ''
       }
     };
   },
@@ -3928,29 +3944,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      formData: {
+        username: '',
+        password: ''
+      }
+    };
+  },
   components: {
     RoutePage: _components_RoutePage__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
-  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapMutations"])('counter', ['increment']))
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])('auth', ['login']), {
+    attemptLogin: function attemptLogin() {
+      this.login(this.formData);
+    }
+  })
 });
 
 /***/ }),
@@ -93255,30 +93267,149 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "app" },
-    [
-      _c("AppTopBar"),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "d-flex" },
-        [
-          _c("AppSideBar", { staticClass: "flex-shrink-0" }),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "view-container overflow-auto w-100" },
-            [_c("router-view")],
-            1
-          )
-        ],
-        1
-      )
-    ],
-    1
-  )
+  return _c("div", { staticClass: "app" }, [
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: !_vm.isLoggedIn,
+            expression: "!isLoggedIn"
+          }
+        ]
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "d-flex justify-content-center align-items-center" },
+          [
+            _c(
+              "div",
+              { staticClass: "card", staticStyle: { width: "400px" } },
+              [
+                _c("div", { staticClass: "card-body" }, [
+                  _c("div", {}, [
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "name" } }, [
+                        _vm._v("Username")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.formData.username,
+                            expression: "formData.username"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "text", id: "username" },
+                        domProps: { value: _vm.formData.username },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.formData,
+                              "username",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "email" } }, [
+                        _vm._v("Password")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.formData.password,
+                            expression: "formData.password"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "password", id: "password" },
+                        domProps: { value: _vm.formData.password },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.formData,
+                              "password",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary",
+                        on: {
+                          click: function($event) {
+                            return _vm.attemptLogin()
+                          }
+                        }
+                      },
+                      [_vm._v("Login")]
+                    )
+                  ])
+                ])
+              ]
+            )
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.isLoggedIn,
+            expression: "isLoggedIn"
+          }
+        ]
+      },
+      [
+        _c("AppTopBar"),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "d-flex" },
+          [
+            _c("AppSideBar", { staticClass: "flex-shrink-0" }),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "view-container overflow-auto w-100" },
+              [_c("router-view")],
+              1
+            )
+          ],
+          1
+        )
+      ],
+      1
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -93595,7 +93726,7 @@ var render = function() {
           _c("div", { staticClass: "form-inline" }, [
             _c("div", { staticClass: "form-group" }, [
               _c("label", { staticClass: "mr-1", attrs: { for: "name" } }, [
-                _vm._v("Name")
+                _vm._v("Username")
               ]),
               _vm._v(" "),
               _c("input", {
@@ -93603,19 +93734,19 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.formData.name,
-                    expression: "formData.name"
+                    value: _vm.formData.username,
+                    expression: "formData.username"
                   }
                 ],
                 staticClass: "mr-3",
-                attrs: { type: "text", id: "name" },
-                domProps: { value: _vm.formData.name },
+                attrs: { type: "text", id: "username" },
+                domProps: { value: _vm.formData.username },
                 on: {
                   input: function($event) {
                     if ($event.target.composing) {
                       return
                     }
-                    _vm.$set(_vm.formData, "name", $event.target.value)
+                    _vm.$set(_vm.formData, "username", $event.target.value)
                   }
                 }
               })
@@ -93623,7 +93754,7 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "form-group" }, [
               _c("label", { staticClass: "mr-1", attrs: { for: "email" } }, [
-                _vm._v("Email")
+                _vm._v("Password")
               ]),
               _vm._v(" "),
               _c("input", {
@@ -93631,19 +93762,19 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.formData.email,
-                    expression: "formData.email"
+                    value: _vm.formData.password,
+                    expression: "formData.password"
                   }
                 ],
                 staticClass: "mr-3",
-                attrs: { type: "email", id: "email" },
-                domProps: { value: _vm.formData.email },
+                attrs: { type: "password", id: "password" },
+                domProps: { value: _vm.formData.password },
                 on: {
                   input: function($event) {
                     if ($event.target.composing) {
                       return
                     }
-                    _vm.$set(_vm.formData, "email", $event.target.value)
+                    _vm.$set(_vm.formData, "password", $event.target.value)
                   }
                 }
               })
@@ -93713,9 +93844,7 @@ var render = function() {
               return [
                 _c("th", [_vm._v("ID")]),
                 _vm._v(" "),
-                _c("th", [_vm._v("Name")]),
-                _vm._v(" "),
-                _c("th", [_vm._v("Email")])
+                _c("th", [_vm._v("Username")])
               ]
             },
             proxy: true
@@ -93727,9 +93856,7 @@ var render = function() {
               return [
                 _c("td", [_vm._v(_vm._s(entity.id))]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(entity.name))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(entity.email))])
+                _c("td", [_vm._v(_vm._s(entity.username))])
               ]
             }
           }
@@ -93813,77 +93940,75 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("RoutePage", { staticClass: "home" }, [
-    _c(
-      "button",
-      {
-        staticClass: "btn btn-primary",
-        on: {
-          click: function($event) {
-            return _vm.increment()
-          }
-        }
-      },
-      [_vm._v("Increment Count")]
-    ),
-    _vm._v(" "),
-    _c("p", [
-      _vm._v(
-        "\n    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquid exercitationem minus voluptas obcaecati voluptatum mollitia corporis fugiat, architecto cupiditate totam nesciunt, dolor consectetur, officia eum voluptatibus cum id. Quae, modi.\n  "
-      )
-    ]),
-    _vm._v(" "),
-    _c("p", [
-      _vm._v(
-        "\n    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquid exercitationem minus voluptas obcaecati voluptatum mollitia corporis fugiat, architecto cupiditate totam nesciunt, dolor consectetur, officia eum voluptatibus cum id. Quae, modi.\n  "
-      )
-    ]),
-    _vm._v(" "),
-    _c("p", [
-      _vm._v(
-        "\n    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquid exercitationem minus voluptas obcaecati voluptatum mollitia corporis fugiat, architecto cupiditate totam nesciunt, dolor consectetur, officia eum voluptatibus cum id. Quae, modi.\n  "
-      )
-    ]),
-    _vm._v(" "),
-    _c("p", [
-      _vm._v(
-        "\n    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquid exercitationem minus voluptas obcaecati voluptatum mollitia corporis fugiat, architecto cupiditate totam nesciunt, dolor consectetur, officia eum voluptatibus cum id. Quae, modi.\n  "
-      )
-    ]),
-    _vm._v(" "),
-    _c("p", [
-      _vm._v(
-        "\n    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquid exercitationem minus voluptas obcaecati voluptatum mollitia corporis fugiat, architecto cupiditate totam nesciunt, dolor consectetur, officia eum voluptatibus cum id. Quae, modi.\n  "
-      )
-    ]),
-    _vm._v(" "),
-    _c("p", [
-      _vm._v(
-        "\n    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquid exercitationem minus voluptas obcaecati voluptatum mollitia corporis fugiat, architecto cupiditate totam nesciunt, dolor consectetur, officia eum voluptatibus cum id. Quae, modi.\n  "
-      )
-    ]),
-    _vm._v(" "),
-    _c("p", [
-      _vm._v(
-        "\n    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquid exercitationem minus voluptas obcaecati voluptatum mollitia corporis fugiat, architecto cupiditate totam nesciunt, dolor consectetur, officia eum voluptatibus cum id. Quae, modi.\n  "
-      )
-    ]),
-    _vm._v(" "),
-    _c("p", [
-      _vm._v(
-        "\n    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquid exercitationem minus voluptas obcaecati voluptatum mollitia corporis fugiat, architecto cupiditate totam nesciunt, dolor consectetur, officia eum voluptatibus cum id. Quae, modi.\n  "
-      )
-    ]),
-    _vm._v(" "),
-    _c("p", [
-      _vm._v(
-        "\n    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquid exercitationem minus voluptas obcaecati voluptatum mollitia corporis fugiat, architecto cupiditate totam nesciunt, dolor consectetur, officia eum voluptatibus cum id. Quae, modi.\n  "
-      )
-    ]),
-    _vm._v(" "),
-    _c("p", [
-      _vm._v(
-        "\n    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquid exercitationem minus voluptas obcaecati voluptatum mollitia corporis fugiat, architecto cupiditate totam nesciunt, dolor consectetur, officia eum voluptatibus cum id. Quae, modi.\n  "
-      )
+    _c("div", { staticClass: "card" }, [
+      _c("div", { staticClass: "card-body" }, [
+        _c("div", {}, [
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "name" } }, [_vm._v("Username")]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.formData.username,
+                  expression: "formData.username"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { type: "text", id: "username" },
+              domProps: { value: _vm.formData.username },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.formData, "username", $event.target.value)
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "email" } }, [_vm._v("Password")]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.formData.password,
+                  expression: "formData.password"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { type: "password", id: "password" },
+              domProps: { value: _vm.formData.password },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.formData, "password", $event.target.value)
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-primary",
+              on: {
+                click: function($event) {
+                  return _vm.attemptLogin()
+                }
+              }
+            },
+            [_vm._v("Login")]
+          )
+        ])
+      ])
     ])
   ])
 }
@@ -110545,6 +110670,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/src/config.js":
+/*!************************************!*\
+  !*** ./resources/js/src/config.js ***!
+  \************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  clientId: 2,
+  clientSecret: 'CqnlKxZxY5715rcohMIrvwAcpCJQnWAs1eGQwHqO'
+});
+
+/***/ }),
+
 /***/ "./resources/js/src/entities/User.js":
 /*!*******************************************!*\
   !*** ./resources/js/src/entities/User.js ***!
@@ -110768,6 +110909,78 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/src/store/auth.js":
+/*!****************************************!*\
+  !*** ./resources/js/src/store/auth.js ***!
+  \****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../config */ "./resources/js/src/config.js");
+
+
+var auth = {
+  namespaced: true,
+  state: {
+    currentUser: {},
+    accessToken: null,
+    refreshToken: null
+  },
+  getters: {
+    isLoggedIn: function isLoggedIn(state) {
+      state.accessToken != null;
+    }
+  },
+  mutations: {
+    SET_CURRENT_USER: function SET_CURRENT_USER(state, payload) {
+      state.currentUser = payload.currentUser;
+    },
+    SET_TOKENS: function SET_TOKENS(state, payload) {
+      state.accessToken = payload.accessToken;
+      state.refreshToken = payload.refreshToken;
+    }
+  },
+  actions: {
+    login: function login(context, payload) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('http://localhost:8000/oauth/token', {
+        grant_type: 'password',
+        client_id: _config__WEBPACK_IMPORTED_MODULE_1__["default"].clientId,
+        client_secret: _config__WEBPACK_IMPORTED_MODULE_1__["default"].clientSecret,
+        username: payload.username,
+        password: payload.password,
+        scope: '*'
+      }).then(function (response) {
+        context.commit('SET_TOKENS', {
+          accessToken: response.data.access_token,
+          refreshToken: response.data.refresh_token
+        });
+      }).then(function () {
+        return context.dispatch('getCurrentUser');
+      });
+    },
+    getCurrentUser: function getCurrentUser(context) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('http://localhost:8000/api/users/current', {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ' + context.state.accessToken,
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      }).then(function (response) {
+        context.commit('SET_CURRENT_USER', {
+          currentUser: response.data
+        });
+      });
+    }
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = (auth);
+
+/***/ }),
+
 /***/ "./resources/js/src/store/counter.js":
 /*!*******************************************!*\
   !*** ./resources/js/src/store/counter.js ***!
@@ -110806,12 +111019,15 @@ var stores = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _counter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./counter */ "./resources/js/src/store/counter.js");
 /* harmony import */ var _users__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./users */ "./resources/js/src/store/users.js");
+/* harmony import */ var _auth__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./auth */ "./resources/js/src/store/auth.js");
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   modules: {
     counter: _counter__WEBPACK_IMPORTED_MODULE_0__["default"],
-    users: _users__WEBPACK_IMPORTED_MODULE_1__["default"]
+    users: _users__WEBPACK_IMPORTED_MODULE_1__["default"],
+    auth: _auth__WEBPACK_IMPORTED_MODULE_2__["default"]
   }
 });
 

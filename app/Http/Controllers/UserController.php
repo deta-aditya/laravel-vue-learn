@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Str;
-use App\User;
+use App\Account;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -18,19 +18,24 @@ class UserController extends Controller
 
         // $users = $query->get();
 
-        return User::orderBy('id', 'desc')->paginate(10);
+        return Account::orderBy('id', 'desc')->paginate(10);
     }
 
     public function insert(Request $request)
     {
         $data = $request->only([
-            'name', 'email',
+            'username', 'password',
         ]);
 
-        $data['password'] = Str::random(10);
+        $data['password'] = bcrypt($data['password']);
 
-        $user = User::create($data);
+        $user = Account::create($data);
 
         return response()->json($user);
+    }
+
+    public function current(Request $request)
+    {
+        return $request->user();
     }
 }

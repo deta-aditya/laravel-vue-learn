@@ -1,10 +1,31 @@
 <template>
   <div class="app">
-    <AppTopBar />
-    <div class="d-flex">
-      <AppSideBar class="flex-shrink-0" />
-      <div class="view-container overflow-auto w-100">
-        <router-view />
+    <div v-show="!isLoggedIn">
+      <div class="d-flex justify-content-center align-items-center">
+        <div class="card" style="width:400px">
+          <div class="card-body">
+            <div class="">
+              <div class="form-group">
+                <label for="name">Username</label>
+                <input class="form-control" v-model="formData.username" type="text" id="username" />
+              </div>
+              <div class="form-group">
+                <label for="email">Password</label>
+                <input class="form-control" v-model="formData.password" type="password" id="password" />
+              </div>
+              <button class="btn btn-primary" @click="attemptLogin()">Login</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-show='isLoggedIn'>
+      <AppTopBar />
+      <div class="d-flex">
+        <AppSideBar class="flex-shrink-0" />
+        <div class="view-container overflow-auto w-100">
+          <router-view />
+        </div>
       </div>
     </div>
   </div>
@@ -14,6 +35,7 @@
 
 import AppTopBar from './components/AppTopBar'
 import AppSideBar from './components/AppSideBar'
+import { mapGetters, mapActions } from 'vuex'
 import axios from 'axios'
 
 export default {
@@ -24,16 +46,18 @@ export default {
   data() {
     return {
       title: 'User List',
-      form: {
-        name: '',
-        email: '',
+      formData: {
+        username: '',
+        password: '',
       },
       response: {},
     }
   },
 
   computed: {
-    
+    ...mapGetters('auth', [
+      'isLoggedIn'
+    ])
   },
 
   mounted() {
@@ -41,21 +65,15 @@ export default {
   },
 
   methods: {
-    saveUser() {
-      const newUser = {
-        ...this.form,
-      }
+    ...mapActions('auth', [
+      'login'
+    ]),
 
-      this.saveUserToServer(newUser)
-
-      this.form.name = ''
-      this.form.email = ''
-    },
-
-    saveUserToServer(user) {
-      axios.post('http://localhost:8000/api/users', user)
-        .then((response) => this.getUsersFromServer())
-    },
+    attemptLogin() {
+      this.login(this.formData)
+        .then(() => console.log('Test'))
+        .then(() => this.$router.push('/foo'))
+    }
   },
 }
 

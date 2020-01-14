@@ -16,6 +16,10 @@ use Illuminate\Http\Request;
 Route::get('/users', 'UserController@index');
 Route::post('/users', 'UserController@insert');
 
+Route::middleware('auth:api')->group(function () {
+    Route::get('/users/current', 'UserController@current');
+});
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
