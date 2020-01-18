@@ -17,10 +17,10 @@ export default {
   data() {
     return {
       links: [
-        { href: '/', text: 'Home' },
-        { href: '/foo', text: 'About' },
-        { href: '/bar', text: 'Vendor Management' },
-        { href: '/user', text: 'User Management', children: [
+        { href: '/admin', text: 'Home' },
+        { href: '/admin/foo', text: 'About' },
+        { href: '/admin/bar', text: 'Vendor Management' },
+        { href: '/admin/user', text: 'User Management', children: [
           { href: '/', text: 'User Index'},
           { href: '/roles', text: 'Role Index'},
         ] },

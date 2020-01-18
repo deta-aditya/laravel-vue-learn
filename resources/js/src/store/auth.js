@@ -12,7 +12,7 @@ const auth = {
 
   getters: {
     isLoggedIn(state) {
-      state.accessToken != null
+      return state.accessToken != null
     }
   },
 
@@ -57,7 +57,18 @@ const auth = {
             currentUser: response.data
           })
         })
-    }
+    },
+
+    logout(context) {
+      context.commit('SET_TOKENS', {
+        accessToken: null,
+        refreshToken: null,
+      })
+
+      context.commit('SET_CURRENT_USER', {
+        currentUser: {},
+      })
+    },
   },
 }
 
