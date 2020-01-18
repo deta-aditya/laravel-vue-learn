@@ -11,7 +11,7 @@
 |
 */
 
-Route::view('/', 'index');
+// Route::view('/', 'index');
 Route::get('{any}', function () {
   return view('index');
 })->where('any','.*');
