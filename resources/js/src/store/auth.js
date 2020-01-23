@@ -41,7 +41,9 @@ const auth = {
           accessToken: response.data.access_token,
           refreshToken: response.data.refresh_token,
         })
-      }).then(() => context.dispatch('getCurrentUser'))
+      })
+        .then(() => context.dispatch('persistToken'))
+        .then(() => context.dispatch('getCurrentUser'))
     },
 
     getCurrentUser(context) {
@@ -68,7 +70,26 @@ const auth = {
       context.commit('SET_CURRENT_USER', {
         currentUser: {},
       })
+
+      context.dispatch('clearToken')
     },
+
+    persistToken(context) {
+      localStorage.setItem('access_token', context.state.accessToken)
+      localStorage.setItem('refresh_token', context.state.refreshToken)
+    },
+
+    hydrateToken(context) {
+      context.commit('SET_TOKENS', {
+        accessToken: localStorage.getItem('access_token'),
+        refreshToken: localStorage.getItem('refresh_token')
+      })
+    },
+
+    clearToken() {
+      localStorage.removeItem('access_token')
+      localStorage.removeItem('refresh_token')
+    }
   },
 }
 

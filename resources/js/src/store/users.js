@@ -6,7 +6,7 @@ const users = {
   state: {
     page: {
       current_page: 0,
-      first_page: 0,
+      first_page: 1,
       last_page: 0,
     },
     users: [],
@@ -29,7 +29,6 @@ const users = {
   mutations: {
     SET_PAGE(state, payload) {
       state.page.current_page = payload.current_page
-      state.page.first_page = payload.from
       state.page.last_page = payload.last_page
     },
 

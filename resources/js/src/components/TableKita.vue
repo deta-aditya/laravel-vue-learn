@@ -23,13 +23,23 @@
           </a>
         </li>
         <li 
-          v-for="pageItem in page.last_page" :key="pageItem" 
+          v-for="pageItem in page.first_page + 1" :key="pageItem" 
           :class="{'page-item': true, 'active': isCurrentPage(pageItem)}">
           <a
             class="page-link" 
             href="#"
             @click.prevent="getEntityFromServer(pageItem)">
             {{pageItem}}
+          </a>
+        </li>
+        <li 
+          v-for="pageItem in page.first_page + 1" :key="pageItem" 
+          :class="{'page-item': true, 'active': isCurrentPage(page.last_page - pageItem)}">
+          <a
+            class="page-link" 
+            href="#"
+            @click.prevent="getEntityFromServer(page.last_page - pageItem)">
+            {{page.last_page - pageItem}}
           </a>
         </li>
         <li :class="{'page-item': true, 'disabled': isLastPage}">
