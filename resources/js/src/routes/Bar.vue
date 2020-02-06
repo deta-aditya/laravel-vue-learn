@@ -1,20 +1,6 @@
 <template>
   <RoutePage>
-    <div class="card">
-      <div class="card-body">
-        <div class="form-inline">
-          <div class="form-group">
-            <label class="mr-1" for="name">Username</label>
-            <input class="mr-3" v-model="formData.username" type="text" id="username" />
-          </div>
-          <div class="form-group">
-            <label class="mr-1" for="email">Password</label>
-            <input class="mr-3" v-model="formData.password" type="password" id="password" />
-          </div>
-          <button class="btn btn-primary" @click="insertUserOnForm()">Add</button>
-        </div>
-      </div>
-    </div>
+    <button class="btn btn-primary" @click="toggleModal()">Add</button>
     <div>
       <input type="radio" v-model="dark" :value="true"/> Dark
       <input type="radio" v-model="dark" :value="false"/> Light
@@ -25,12 +11,17 @@
       <template v-slot:header>
         <th>ID</th>
         <th>Username</th>
+        <th>Actions</th>
       </template>
       <template v-slot="{ entity }">
         <td>{{ entity.id }}</td>
         <td>{{ entity.username }}</td>
+        <td>
+          <button type="button" class="btn btn-link" @click="editUser(entity)">Edit</button>
+        </td>
       </template>
     </TableKita>
+    <Modal id="create-user" :show="showModal" @hide="toggleModal" v-model="editEntity"/>
   </RoutePage>
 </template>
 
@@ -40,6 +31,7 @@ import axios from 'axios'
 import User from '../entities/User'
 import TableKita from '../components/TableKita'
 import RoutePage from '../components/RoutePage'
+import Modal from '../components/Modal'
 import { mapActions } from 'vuex'
 
 export default {
@@ -47,10 +39,12 @@ export default {
     return {
       dark: false,
       userEntity: User,
-      formData: {
+      editEntity: {
+        id: 0,
         username: '',
         password: '',
-      }
+      },
+      showModal: false,
     }
   },
 
@@ -59,14 +53,25 @@ export default {
       'insertUser'
     ]),
 
-    insertUserOnForm() {
-      this.insertUser({ user: this.formData })
+    toggleModal() {
+      this.showModal = ! this.showModal
     },
+
+    editUser(entity) {
+      this.editEntity.id = entity.id
+      this.editEntity.username = entity.username
+      this.toggleModal()
+    },
+
+    catchEditEntity(newEntity) {
+      this.editEntity = newEntity
+    }
   },
 
   components: {
     TableKita,
     RoutePage,
+    Modal,
   },
 }
 </script>
